@@ -52,7 +52,7 @@ function AddNews() {
   const { isNewsCreationPending, isNewsCreated, error } =
     useSelector(newsSelector);
   const [selectedFile, setSelectedFile] = useState([]);
-  const [CoverPhoto, setCoverPhoto] = useState([]);
+  const [coverPhoto, setcoverPhoto] = useState<any[]>([]);
   const [selected, setSelected] = useState<any[]>([]);
 
   useEffect(() => {
@@ -81,8 +81,8 @@ function AddNews() {
     setSelectedFile(event.target.files);
   };
 
-  const handleCoverPhotoSelect = (e: any) => {
-    setCoverPhoto(e.target.files[0]);
+  const handlecoverPhotoSelect = (e: any) => {
+    setcoverPhoto(e.target.files[0]);
   };
 
   return (
@@ -107,13 +107,17 @@ function AddNews() {
           title: values.title,
           description: values.description,
           publishDate: values.publishDate,
-          cover: CoverPhoto,
+          cover: coverPhoto,
           published: true,
           tags: selected,
           files: selectedFile,
         };
 
         dispatch(createNews(payload));
+        resetForm();
+        setSelected([]);
+        setcoverPhoto([]);
+        setSelectedFile([]);
       }}
     >
       {({
@@ -187,14 +191,14 @@ function AddNews() {
                         className={classes.label}
                       >
                         <CloudUploadIcon className={classes.icon} />
-                        {CoverPhoto ? "File Selected" : "Choose files"}
+                        Choose file
                       </InputLabel>
                       <input
                         name="coverPic"
                         id="upload-file"
                         type="file"
                         className={classes.input}
-                        onChange={handleCoverPhotoSelect}
+                        onChange={handlecoverPhotoSelect}
                       />
                     </FormControl>
                     {touched.coverPic && errors.coverPic && (
